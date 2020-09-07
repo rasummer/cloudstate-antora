@@ -4,7 +4,6 @@ Author Name
 :idseparator: -
 :!example-caption:
 :page-description: Your custom page description goes here
-:page-social-share-image: https://downloads.lightbend.com/website/social/lightbend-logo-orange-twitter.jpg
 :toc:
 :toc-title: ON THIS PAGE
 :toclevels: 2
@@ -62,12 +61,6 @@ monospace bold italic `*_constrained_*` & ``**__un__**``constrained
 
 == Images
 
-----
-image::https://d3gnpvjw8j16uq.cloudfront.net/assets/images/svg/diagrams/lightbend-platform-overview.svg[Lightbend Platform Overview]
-----
-
-image::https://d3gnpvjw8j16uq.cloudfront.net/assets/images/svg/diagrams/lightbend-platform-overview.svg[Lightbend Platform Overview]
-
 
 == Block Image Groups
 
@@ -94,7 +87,7 @@ image::https://via.placeholder.com/500x300?text=Example+Image[]
 
 === Vertically align to top
 
-  
+
 ----
 [.image-group.top]
 --
@@ -167,32 +160,32 @@ image::https://via.placeholder.com/600x300?text=25%+Width[]
 
 You can use the following widths
 ----
-[.width-5] 
-[.width-10] 
-[.width-15] 
-[.width-20] 
-[.width-25] 
-[.width-30] 
-[.width-35] 
-[.width-40] 
-[.width-45] 
-[.width-50] 
-[.width-55] 
-[.width-60] 
-[.width-65] 
-[.width-70] 
-[.width-75] 
-[.width-80] 
-[.width-85] 
-[.width-90] 
-[.width-95] 
+[.width-5]
+[.width-10]
+[.width-15]
+[.width-20]
+[.width-25]
+[.width-30]
+[.width-35]
+[.width-40]
+[.width-45]
+[.width-50]
+[.width-55]
+[.width-60]
+[.width-65]
+[.width-70]
+[.width-75]
+[.width-80]
+[.width-85]
+[.width-90]
+[.width-95]
 [.width-100]
 ----
 
 
 == Tabsets
 
-[.tabset] 
+[.tabset]
 Scala::
 This is the scala of the first tab.
 Java::
@@ -208,10 +201,10 @@ public class Minikube {
 ----
 
 
-[.tabset] 
+[.tabset]
 Play::
-+ 
--- 
++
+--
 This is the content of the first tab.
 
 Another paragraph in the first tab.
@@ -246,10 +239,10 @@ $ a code block
 
 
 
-[.tabset] 
+[.tabset]
 Scala::
-+ 
--- 
++
+--
 This is the content of the first tab.
 
 Another paragraph in the first tab.
@@ -272,10 +265,10 @@ $ a code block
 --
 
 
-[.tabset] 
+[.tabset]
 Minikube::
-+ 
--- 
++
+--
 This is the hello of the first tab.
 
 Another paragraph in the first tab.
@@ -308,7 +301,7 @@ This is the java of the second tab.
 
 
 
-[.tabset] 
+[.tabset]
 Browser::
 This is the Browser stuff for the first tab.
 CLI::
@@ -328,9 +321,9 @@ This is the CLI stuff for the second tab.
 | For those new to Reactive microservices, streaming, or Kubernetes-based platforms, this section contains fundamental information to help you get the most out of your efforts. Read xref:microservices-project.adoc[Planning a microservices project] to start with the Lightbend Platform tool that best fits your team and requirements. xref:streaming-and-analysis.adoc[Planning for streaming data and analysis] lists some important factors to keep in mind when working with streaming data. xref:planning-a-cluster.adoc[Deployment platform recommendations] provides an overview of Kubernetes-based platforms and provides tips and guidelines that will help when setting up environments for development and testing or for production.
 
 | Getting started
-| Describes how to obtain a Lightbend Platform subscription and explains support terminology. xref:preparing-dev-env.adoc[Preparing a development environment] shows you how to add the appropriate credentials to your build structure and how to set up a local Kubernetes cluster for testing. xref:setting-up-production-env.adoc[Setting up a production environment] provides helpful links and tips for setting up a multi-cluster Kubernetes-based production environment. xref:lightbend-platform.adoc[Lightbend Platform specifics] 
+| Describes how to obtain a Lightbend Platform subscription and explains support terminology. xref:preparing-dev-env.adoc[Preparing a development environment] shows you how to add the appropriate credentials to your build structure and how to set up a local Kubernetes cluster for testing. xref:setting-up-production-env.adoc[Setting up a production environment] provides helpful links and tips for setting up a multi-cluster Kubernetes-based production environment. xref:lightbend-platform.adoc[Lightbend Platform specifics]
 
-|=== 
+|===
 
 
 
@@ -347,15 +340,15 @@ This is the CLI stuff for the second tab.
 |===
 
 
-|=== 
+|===
 
-| Cell in column 1, row 1 | Cell in column 2, row 1  
+| Cell in column 1, row 1 | Cell in column 2, row 1
 
 | Cell in column 1, row 2 | Cell in column 2, row 2
 
 | Cell in column 1, row 3 | Cell in column 2, row 3
 
-|=== 
+|===
 
 
 |===
@@ -449,7 +442,7 @@ This is the CLI stuff for the second tab.
 
 
 
-[cols="3*"] 
+[cols="3*"]
 |===
 |Cell in column 1, row 1
 |Cell in column 2, row 1
@@ -481,7 +474,7 @@ print ("%s" %(os.uname()))
 |===
 
 
-[.scala] 
+[.scala]
 Used to enter text or control items on the screen.
 [.java]
 Used to enter text or control items on the screen.
@@ -895,7 +888,9 @@ Play Framework requires a secret key which is used to sign its session cookie, a
 .. Generate the secret:
 +
 [source,sh]
-include:::example$create-application-secret.sh[]
+----
+create application secret
+----
 
 .. Note that the `prod-application.conf` file contains the logic to consume the secret via an environment variable:
 +

@@ -1,6 +1,7 @@
 :root {
   --toolbar-height: 2.5rem;
 }
+
 body.simple .toolbar {
   opacity: 0;
   height: 0;
@@ -16,7 +17,7 @@ body.simple .toolbar {
   height: var(--toolbar-height);
   justify-content: flex-start;
   position: sticky;
-  top: var(--navbar-height);
+  top: calc(var(--navbar-height) + var(--oss-banner-height));
   z-index: 2;
 }
 
@@ -47,6 +48,7 @@ body.simple .toolbar {
     display: none;
   }
 }
+
 @media screen and (min-width: 1280px) {
   body.simple .toolbar {
     opacity: 0;

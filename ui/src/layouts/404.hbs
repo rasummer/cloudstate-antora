@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{detag (or page.title 'Page Not Found')}}{{#if site.title}} :: {{site.title}}{{/if}}</title>
     <link rel="stylesheet" href="{{uiRootPath}}/css/site.css?v-01">
-	<link rel="shortcut icon" href="{{uiRootPath}}/img/favicons/favicon.ico" />
-{{> head-scripts-lightbend}}
+	<link rel="shortcut icon" href="{{uiRootPath}}/img/favicon.ico" />
+{{> head-scripts}}
   </head>
   <body class="status-404">
-{{> header theme="lightbend" url="https://developer.lightbend.com/docs/"}}
+{{> header theme="cloudstate" url="https://cloudstate.io"}}
 {{> main}}
-{{> footer-content}}
+{{> footer}}
 {{> footer-scripts-global}}
-{{> footer-scripts-lightbend}}
+{{> footer-scripts}}
   </body>
 </html>

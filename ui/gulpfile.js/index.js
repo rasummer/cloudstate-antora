@@ -15,7 +15,7 @@ const { remove, lintCss, lintJs, format, build, pack, previewPages, serve } = re
 const glob = {
   all: [srcDir, previewSrcDir],
   css: `${srcDir}/css/**/*.css`,
-  js: ['gulpfile.js/**/*.js', `${srcDir}/{helpers,js}/**/*.js`],
+  js: ['gulpfile.js/**/*.js', `${srcDir}/{helpers,js}/**/*.js`, `!${srcDir}/js/vendor/*.min.js`],
 }
 
 const cleanTask = task({
@@ -51,7 +51,11 @@ const formatTask = task({
 const buildTask = task({
   name: 'build',
   desc: 'Build and stage the UI assets for bundling',
-  call: build(srcDir, destDir, tree().nodes.some((name) => ~name.indexOf('preview'))),
+  call: build(
+    srcDir,
+    destDir,
+    tree().nodes.some((name) => ~name.indexOf('preview'))
+  ),
 })
 
 const bundleBuildTask = task({

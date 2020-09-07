@@ -2,18 +2,15 @@
 <html lang="en">
   <head>
 {{> head-global}}
-{{> head-lightbend}}
-{{> head-scripts-lightbend}}
+{{> head}}
+{{> head-scripts}}
 {{> head-scripts-youtube-embed}}
   </head>
-  <body class="article {{page.attributes.type}}">
-{{> header theme="lightbend" url="https://developer.lightbend.com/docs/" site-id-url="https://developer.lightbend.com/docs/"}}
+  <body class="article {{page.attributes.type}} cloudstate">
+{{> header theme="cloudstate" url="https://cloudstate.io" site-id-url="https://cloudstate.io/docs/"}}
 {{> main}}
-<footer class="footer">
-	{{> footer-nav}}
-	{{> footer-legal-lightbend}}
-</footer>
+{{> footer}}
 {{> footer-scripts-global}}
-{{> footer-scripts-lightbend}}
+{{> footer-scripts}}
   </body>
 </html>

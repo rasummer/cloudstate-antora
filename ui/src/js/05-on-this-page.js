@@ -9,7 +9,8 @@
   var headings
   if (
     document.querySelector('.body.-toc') ||
-    !(headings = find('h1[id].sect0, .sect1 > h2[id], .sect2 > h3[id]', (doc = document.querySelector('article.doc')))).length
+    !(headings = find('h1[id].sect0, .sect1 > h2[id], .sect2 > h3[id]', (doc = document.querySelector('article.doc'))))
+      .length
   ) {
     sidebar.parentNode.removeChild(sidebar)
     return
@@ -45,8 +46,8 @@
   //should it stick
   var intViewportHeight = window.innerHeight
   var menuHeight = menu.offsetHeight
-  if(menuHeight < intViewportHeight){
-    menu.classList.add("stick")
+  if (menuHeight < intViewportHeight) {
+    menu.classList.add('stick')
   }
 
   if (sidebar) {
@@ -68,7 +69,7 @@
     // NOTE doc.parentNode.offsetTop ~= doc.parentNode.getBoundingClientRect().top + window.pageYOffset
     //var targetPosition = doc.parentNode.offsetTop
     // NOTE no need to compensate wheen using spacer above [id] elements
-    var targetPosition = 150
+    var targetPosition = 220
     var activeFragment
     headings.some(function (heading) {
       if (Math.floor(heading.getBoundingClientRect().top) <= targetPosition) {
@@ -102,7 +103,7 @@
   function toArray (collection) {
     return [].slice.call(collection)
   }
-  
+
   var article = document.querySelector('article.doc')
   var toolbar = document.querySelector('.toolbar')
 

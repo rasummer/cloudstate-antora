@@ -1,6 +1,7 @@
 :root {
   --drawer-height: 2.5rem;
 }
+
 body.simple .navigation-container {
   opacity: 0;
   height: 0;
@@ -9,7 +10,7 @@ body.simple .navigation-container {
 .navigation-container {
   display: none;
   position: fixed;
-  top: var(--navbar-height);
+  top: calc(var(--navbar-height) + var(--oss-banner-height));
   left: 0;
   width: 100%;
   font-size: 0.9375rem;
@@ -24,7 +25,7 @@ body.simple .navigation-container {
   background-color: #fafafa;
   position: relative;
   top: var(--toolbar-height);
-  height: calc(100vh - var(--navbar-height) - var(--toolbar-height));
+  height: calc(100vh - var(--navbar-height) - var(--oss-banner-height) - var(--toolbar-height));
 }
 
 .navigation .panels {
@@ -38,6 +39,7 @@ body.simple .navigation-container {
     width: 14rem;
     font-size: 0.875rem;
   }
+
   .navigation {
     box-shadow: 0.5px 0 3px #c1c1c1;
   }
@@ -47,6 +49,7 @@ body.simple .navigation-container {
   body.simple .navigation-container {
     display: none;
   }
+
   .navigation-container {
     font-size: 0.8125rem;
     flex: none;
@@ -54,13 +57,15 @@ body.simple .navigation-container {
     position: static;
     top: 0;
   }
+
   .navigation {
-    top: var(--navbar-height);
+    top: calc(var(--navbar-height) + var(--oss-banner-height));
     box-shadow: none;
     position: sticky;
-    height: calc(100vh - var(--navbar-height));
+    height: calc(100vh - var(--navbar-height) - var(--oss-banner-height));
   }
 }
+
 @media screen and (min-width: 1280px) {
   body.simple .navigation-container {
     display: block;
@@ -72,13 +77,3 @@ body.simple .navigation-container {
     width: 18rem;
   }
 }
-
-
-
-
-
-
-
-
-
-

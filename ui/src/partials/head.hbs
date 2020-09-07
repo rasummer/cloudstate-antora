@@ -1,0 +1,10 @@
+{{#if page.attributes.robots}}
+<meta name="robots" content="{{page.attributes.robots}}">
+{{/if}}
+
+<meta property="og:site_name" content="Cloudstate Documentation" />
+<meta name="author" content="Cloudstate Documentation">
+<meta itemprop="image" content="{{or page.attributes.social-share-image "https://cloudstate.io/dist/images/cloudstate-distributed-state-management-for-serverless.png"}}">
+<meta name="twitter:image:src" content="{{or page.attributes.social-share-image "https://cloudstate.io/dist/images/cloudstate-distributed-state-management-for-serverless.png"}}">
+<meta property="og:image" content="{{or page.attributes.social-share-image "https://cloudstate.io/dist/images/cloudstate-distributed-state-management-for-serverless.png"}}" />
+<meta property="og:image:secure_url" content="{{or page.attributes.social-share-image "https://cloudstate.io/dist/images/cloudstate-distributed-state-management-for-serverless.png"}}" />

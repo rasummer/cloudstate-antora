@@ -1,8 +1,8 @@
 :root {
   --color-text: #1c3b47;
-  --color-navbar-bg: #ff931e;
-  --color-navbar-bg-focus: #ff931e;
-  --color-navbar-text: #ffffff;
+  --color-navbar-bg: #15a9ce;
+  --color-navbar-bg-focus: #15a9ce;
+  --color-navbar-text: #fff;
   --color-lb-orange: #ff931e;
   --color-lb-orange-dkr: #f48122;
   --color-lb-orange-ltr: #ffa94b;
@@ -10,7 +10,7 @@
   --color-lb-slate-dkr: #0c323b;
   --color-lb-slate-ltr: #406972;
   --color-lb-grey: #454e57;
-  --color-lb-grey-dkr: #31373B;
+  --color-lb-grey-dkr: #31373b;
   --color-lb-off-white: #f5f6f7;
   --color-lb-off-white-dkr: #ebeef0;
   --color-lb-light-grey: #c5d0d4;
@@ -19,7 +19,6 @@
   --color-lb-blue: #15a9ce;
   --color-lb-blue-dkr: #107f9b;
   --color-lb-dark-blue: #0b5567;
-
 }
 
 html,
@@ -51,9 +50,8 @@ body {
   line-height: 1.6;
   margin: 0;
   -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 a {

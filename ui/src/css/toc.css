@@ -1,78 +1,86 @@
 .toc-menu {
-	display: none;
+  display: none;
 }
+
 .toc {
-  	position: relative;
-  	padding: 0;
+  position: relative;
+  padding: 0;
 }
+
 #toc {
-	font-size: .938rem;
+  font-size: 0.938rem;
 }
+
 @media screen and (min-width: 1280px) {
-	.toc {
-		flex-grow: 1;
-		flex-basis: 0;
-		border: 0px solid red;
-		max-width: 380px;
-	}
-	.toc-menu {
-		display: inline-block;
-		padding: 0 1rem;
-		border: 0px solid grey;
-		max-width: 600px;
-		margin-top: 20px;
-	}
-	.toc-menu.stick {
-		position: sticky;
-		top: 150px;
-		margin-top: 0;
-	}
-	.docs-only .toc-menu.stick{
-		top: 20px;
-	}
-	#toc {
-		display: none;
-	}
+  .toc {
+    flex-grow: 1;
+    flex-basis: 0;
+    border: 0 solid red;
+    max-width: 380px;
+  }
+
+  .toc-menu {
+    display: inline-block;
+    padding: 0 1rem;
+    border: 0 solid grey;
+    max-width: 600px;
+    margin-top: 20px;
+  }
+
+  .toc-menu.stick {
+    position: sticky;
+    top: 150px;
+    margin-top: 0;
+  }
+
+  .docs-only .toc-menu.stick {
+    top: 20px;
+  }
+
+  #toc {
+    display: none;
+  }
 }
 
 .toc-menu h3 {
-	color: var(--color-lb-orange);
-	color: var(--color-lb-slate);
-	font-size: 1rem;
-	font-weight: 700;
-	text-transform: uppercase;
-	margin-bottom: .5rem;
+  color: var(--color-lb-blue);
+  color: var(--color-lb-slate);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
 }
 
 .toc-menu ul {
-	list-style-type: none;
-	padding: 0;
-	margin-top: 0
+  list-style-type: none;
+  padding: 0;
+  margin-top: 0;
 }
 
 .toc-menu ul li a {
-	display: block;
-	color: var(--color-lb-light-grey-dkr);
-	border-left: 2px solid var(--color-lb-off-white);
-	padding: .250rem .5rem;
-	margin: 0;
-	font-size: .875rem;
+  display: block;
+  color: var(--color-lb-light-grey-dkr);
+  border-left: 2px solid var(--color-lb-off-white);
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+  font-size: 0.875rem;
 }
-.toc-menu ul li a:hover {
-	color: var(--color-lb-orange);
-	text-decoration: none;
-}
-.toc-menu ul li a.is-active {
-	color: var(--color-lb-slate);
-	border-left: 2px solid var(--color-lb-orange);
 
+.toc-menu ul li a:hover {
+  color: var(--color-lb-blue);
+  text-decoration: none;
+}
+
+.toc-menu ul li a.is-active {
+  color: var(--color-lb-slate);
+  border-left: 2px solid var(--color-lb-blue);
 }
 
 .toc-menu ul li.h2 a {
-	font-size: .850rem
-}
-.toc-menu ul li.h3 a {
-	font-size: .750rem;
-	padding-left: 1.5rem;
+  font-size: 0.85rem;
 }
 
+.toc-menu ul li.h3 a {
+  font-size: 0.75rem;
+  padding-left: 1.5rem;
+}

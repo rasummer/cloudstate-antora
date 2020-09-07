@@ -1,183 +1,199 @@
-groupChangeListeners = [];
+/* eslint-env jquery */
 
-window.groupChanged = function(callback) {
-  groupChangeListeners.push(callback);
+var groupChangeListeners = []
+
+window.groupChanged = function (callback) {
+  groupChangeListeners.push(callback)
 }
 
-$(function() {
-
+$(function () {
   // Groups (like 'java' and 'scala') represent groups of 'switchable' content, either in tabs or in regular text.
   // The catalog of groups can be defined in the sbt parameters to initialize the group.
 
-  var groupCookie = "antoraGroups";
-  var cookieTg = getCookie(groupCookie);
-  var currentGroups = {};
+  var groupCookie = 'antoraGroups'
+  var cookieTg = getCookie(groupCookie)
+  var currentGroups = {}
 
   var catalog = {}
-  var supergroupByGroup = {};
+  var supergroupByGroup = {}
 
-
-  if(cookieTg != "")
-    currentGroups = JSON.parse(cookieTg);
+  if (cookieTg !== '') currentGroups = JSON.parse(cookieTg)
 
   //console.log("cookieTg "+cookieTg);
 
   // http://www.w3schools.com/js/js_cookies.asp
-  function setCookie(cname,cvalue,exdays) {
-    if(!exdays) exdays = 365;
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires=" + d.toGMTString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  function setCookie (cname, cvalue, exdays) {
+    if (!exdays) exdays = 365
+    var d = new Date()
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000)
+    var expires = 'expires=' + d.toGMTString()
+    document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/'
   }
 
   // http://www.w3schools.com/js/js_cookies.asp
-  function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
+  function getCookie (cname) {
+    var name = cname + '='
+    var decodedCookie = decodeURIComponent(document.cookie)
+    var ca = decodedCookie.split(';')
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i]
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1)
       }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length)
       }
     }
-    return "";
+    return ''
   }
 
-  $(".tabset dl").each(function() {
-    var dl = $(this);
-    dl.addClass("tabbed");
-    var dts = dl.find("dt");
-    dts.each(function(i) {
-      var dt = $(this);
-      dt.html("<a href=\"#tab" + i + "\">" + dt.text() + "</a>");
-    });
-    var dds = dl.find("dd");
-    dds.each(function(i) {
-      var dd = $(this);
-      dd.hide();
-      if (dd.find("blockquote").length) {
-        dd.addClass("has-note");
+  $('.tabset dl').each(function () {
+    var dl = $(this)
+    dl.addClass('tabbed')
+    var dts = dl.find('dt')
+    dts.each(function (i) {
+      var dt = $(this)
+      dt.html('<a href="#tab' + i + '">' + dt.text() + '</a>')
+    })
+    var dds = dl.find('dd')
+    dds.each(function (i) {
+      var dd = $(this)
+      dd.hide()
+      if (dd.find('blockquote').length) {
+        dd.addClass('has-note')
       }
-    });
+    })
 
     // Default to the first tab, for grouped tabs switch again later
-    switchToTab(dts.first());
+    switchToTab(dts.first())
 
-    dts.first().addClass("first");
-    dts.last().addClass("last");
-  });
+    dts.first().addClass('first')
+    dts.last().addClass('last')
+  })
 
-
-
-  $(".supergroup").each(function() {
+  $('.supergroup').each(function () {
     //console.log("start-----------------------------------------------");
-    var supergroup = $(this).attr('name').toLowerCase();
-    var groups = $(this).find(".group");
+    var supergroup = $(this)
+      .attr('name')
+      .toLowerCase()
+    var groups = $(this).find('.group')
 
     //console.log("found supergroup : "+supergroup);
 
-
-    var current = currentGroups[supergroup];
+    var current = currentGroups[supergroup]
     if (!current) {
-      current = "group-" + groups.first().text().toLowerCase();
-      currentGroups[supergroup] = current;
+      current =
+        'group-' +
+        groups
+          .first()
+          .text()
+          .toLowerCase()
+      currentGroups[supergroup] = current
     }
-    catalog[supergroup] = [];
+    catalog[supergroup] = []
 
-    groups.each(function() {
-      var group = "group-" + $(this).text().toLowerCase();
-      catalog[supergroup].push(group);
-      supergroupByGroup[group] = supergroup;
-    });
+    groups.each(function () {
+      var group =
+        'group-' +
+        $(this)
+          .text()
+          .toLowerCase()
+      catalog[supergroup].push(group)
+      supergroupByGroup[group] = supergroup
+    })
 
-    switchToGroup(supergroup, current);
+    switchToGroup(supergroup, current)
 
-    $(this).on("change", function() {
-      switchToGroup(supergroup, this.value);
-    });
+    $(this).on('change', function () {
+      switchToGroup(supergroup, this.value)
+    })
     //console.log("end-----------------------------------------------");
-  });
+  })
 
-
-
-  $("dl.tabbed dt a").click(function(e){
-    e.preventDefault();
-    var currentDt = $(this).parent("dt");
-    var currentDl = currentDt.parent("dl");
-
-    var currentGroup = groupOf(currentDt);
-
+  $('dl.tabbed dt a').click(function (e) {
+    e.preventDefault()
+    var currentDt = $(this).parent('dt')
+    var currentGroup = groupOf(currentDt)
     var supergroup = supergroupByGroup[currentGroup]
     if (supergroup) {
-      switchToGroup(supergroup, currentGroup);
+      switchToGroup(supergroup, currentGroup)
     } else {
-      switchToTab(currentDt);
+      switchToTab(currentDt)
     }
-  });
+  })
 
-
-
-  function switchToGroup(supergroup, group) {
-    currentGroups[supergroup] = group;
-    setCookie(groupCookie, JSON.stringify(currentGroups));
+  function switchToGroup (supergroup, group) {
+    currentGroups[supergroup] = group
+    setCookie(groupCookie, JSON.stringify(currentGroups))
 
     // Dropdown switcher:
-    $("select")
-      .has("option[value=" + group +"]")
-      .val(group);
+    $('select')
+      .has('option[value=' + group + ']')
+      .val(group)
 
     // Inline snippets:
     for (var i = 0; i < catalog[supergroup].length; i++) {
-      var peer = catalog[supergroup][i];
-      if (peer == group) {
-        $("." + group).show();
+      var peer = catalog[supergroup][i]
+      if (peer === group) {
+        $('.' + group).show()
       } else {
-        $("." + peer).hide();
+        $('.' + peer).hide()
       }
     }
 
     // Tabbed snippets:
-    $("dl.tabbed").each(function() {
-      var dl = $(this);
-      dl.find("dt").each(function() {
-        var dt = $(this);
-        if(groupOf(dt) == group) {
-          switchToTab(dt);
+    $('dl.tabbed').each(function () {
+      var dl = $(this)
+      dl.find('dt').each(function () {
+        var dt = $(this)
+        if (groupOf(dt) === group) {
+          switchToTab(dt)
         }
-      });
-    });
+      })
+    })
 
-    for (var i = 0; i < groupChangeListeners.length; i++) {
-      groupChangeListeners[i](group, supergroup, catalog);
+    for (var j = 0; j < groupChangeListeners.length; j++) {
+      groupChangeListeners[j](group, supergroup, catalog)
     }
   }
 
-  function switchToTab(dt) {
-    var dl = dt.parent("dl");
-    dl.find(".current").removeClass("current").next("dd").removeClass("current").hide();
-    dt.addClass("current");
-    var currentContent = dt.next("dd").addClass("current").show();
-    dl.css("height", dt.height() + currentContent.height());
+  function switchToTab (dt) {
+    var dl = dt.parent('dl')
+    dl.find('.current')
+      .removeClass('current')
+      .next('dd')
+      .removeClass('current')
+      .hide()
+    dt.addClass('current')
+    var currentContent = dt
+      .next('dd')
+      .addClass('current')
+      .show()
+    dl.css('height', dt.height() + currentContent.height())
   }
 
-  function groupOf(elem) {
-    var classAttribute = elem.next("dd").find("pre").attr("class");
+  function groupOf (elem) {
+    var classAttribute = elem
+      .next('dd')
+      .find('pre')
+      .attr('class')
     if (classAttribute) {
-      var currentClasses = classAttribute.split(' ');
-      var regex = new RegExp("^group-.*");
-      for(var i = 0; i < currentClasses.length; i++) {
-        if(regex.test(currentClasses[i])) {
-          return currentClasses[i];
+      var currentClasses = classAttribute.split(' ')
+      var regex = new RegExp('^group-.*')
+      for (var i = 0; i < currentClasses.length; i++) {
+        if (regex.test(currentClasses[i])) {
+          return currentClasses[i]
         }
       }
     }
 
     // No class found? Then use the tab title
-    return "group-" + elem.find('a').text().toLowerCase();
+    return (
+      'group-' +
+      elem
+        .find('a')
+        .text()
+        .toLowerCase()
+    )
   }
-});
+})
