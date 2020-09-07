@@ -1,0 +1,84 @@
+:root {
+  --drawer-height: 2.5rem;
+}
+body.simple .navigation-container {
+  opacity: 0;
+  height: 0;
+}
+
+.navigation-container {
+  display: none;
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  width: 100%;
+  font-size: 0.9375rem;
+  z-index: 1;
+}
+
+.navigation-container.is-active {
+  display: block;
+}
+
+.navigation {
+  background-color: #fafafa;
+  position: relative;
+  top: var(--toolbar-height);
+  height: calc(100vh - var(--navbar-height) - var(--toolbar-height));
+}
+
+.navigation .panels {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+}
+
+@media screen and (min-width: 769px) {
+  .navigation-container {
+    width: 14rem;
+    font-size: 0.875rem;
+  }
+  .navigation {
+    box-shadow: 0.5px 0 3px #c1c1c1;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  body.simple .navigation-container {
+    display: none;
+  }
+  .navigation-container {
+    font-size: 0.8125rem;
+    flex: none;
+    display: block;
+    position: static;
+    top: 0;
+  }
+  .navigation {
+    top: var(--navbar-height);
+    box-shadow: none;
+    position: sticky;
+    height: calc(100vh - var(--navbar-height));
+  }
+}
+@media screen and (min-width: 1280px) {
+  body.simple .navigation-container {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .navigation-container {
+    width: 18rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+= Welcome to Cloudstate
+include::ROOT:partial$include.adoc[]
+Author Name
+:idprefix:
+:idseparator: -
+:!example-caption:
+:page-layout: default-lightbend-cloudstate
+:page-description: Your custom page description goes here
+:page-social-share-image: https://downloads.lightbend.com/website/social/lightbend-logo-orange-twitter.jpg
+:hardbreaks:
+
+
+
+
+Looking for a serverless platform to lower operational costs and reduce time to market? Must it handle data in a scalable, resilient and elastic way? Cloudstate helps you build highly responsive stateful serverless systems with a minimal learning curve--using techniques and programming languages that you already know.
+
+=== Watch this video demonstration
+
+link:https://www.youtube.com/watch?v=xiFX0y20IFA[Watch on YouTube ,role=yt-widget]

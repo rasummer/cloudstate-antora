@@ -1,0 +1,88 @@
+= Cloudstate documentation UI
+
+UI theme for Antora-based Cloudstate documentation.
+
+== Use Cloudstate documentation UI in a Cloudstate project
+
+To use the Cloudstate documentation UI for an Antora-generated site, add the following configuration to your playbook:
+
+[source,yaml,subs=attributes+]
+----
+ui:
+  bundle:
+    url: TODO
+    snapshot: true
+----
+
+== Preview and bundle the Cloudstate documentation UI
+
+How to preview the Cloudstate documentation UI and bundle it for use with Antora.
+
+=== Prerequisites
+
+To preview and bundle the Cloudstate documentation UI, you need the following software:
+
+* https://git-scm.com[git] (command: `git`)
+* https://nodejs.org[Node] (command: `node`)
+* http://gulpjs.com[Gulp CLI] (command: `gulp`)
+* https://yarnpkg.com[Yarn] (command: `yarn`)
+
+==== Node
+
+Use https://github.com/creationix/nvm[nvm] (Node Version Manager) to install and manage Node.
+
+Install Node 12 (LTS version):
+
+ $ nvm install 12
+
+Switch to this version of Node:
+
+ $ nvm use 12
+
+Make Node 12 the default:
+
+ $ nvm alias default 10
+
+==== Gulp CLI
+
+Install the Gulp CLI globally:
+
+ $ npm install -g gulp-cli
+
+==== Yarn
+
+Install Yarn globally:
+
+ $ npm install -g yarn
+
+=== Install dependencies
+
+Use Yarn to install the project dependencies:
+
+ $ yarn install
+
+This installs the dependencies listed in [.path]_package.json_ into [.path]_node_modules/_.
+
+=== Preview the UI
+
+The UI project is configured to preview offline, using the files in [.path]_preview-src/_.
+
+To build the UI and preview it in a local web server, run the `preview` command:
+
+ $ gulp preview
+
+=== Package for Antora
+
+To bundle the UI to use in local development:
+
+ $ gulp bundle
+
+The UI bundle will be available at [.path]_build/ui-bundle.zip_.
+You can then point Antora at this bundle using the `--ui-bundle-url` command-line option.
+
+== Copyright and License
+
+Based on the https://gitlab.com/antora/antora-ui-default[Antora default UI project] and the https://github.com/lightbend/antora-ui-lightbend-theme[Antora Lightbend theme].
+
+Use of this software is granted under the terms of the https://www.mozilla.org/en-US/MPL/2.0/[Mozilla Public License Version 2.0] (MPL-2.0).
+See link:LICENSE[] to find the full license text.

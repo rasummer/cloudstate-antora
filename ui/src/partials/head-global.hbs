@@ -1,0 +1,32 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{{detag (or page.title 'Untitled')}}}{{#if site.title}} :: {{site.title}}{{/if}}</title>
+
+<link rel="stylesheet" href="{{uiRootPath}}/css/site.css?v-03">
+<link rel="shortcut icon" href="{{uiRootPath}}/img/favicons/favicon.ico" />
+
+<meta itemprop="name" content="{{{detag (or page.title 'Untitled')}}}{{#if site.title}} | {{site.title}}{{/if}}">
+<meta name="twitter:title" content="{{{detag (or page.title 'Untitled')}}}{{#if site.title}} | {{site.title}}{{/if}}">
+<meta property="og:title" content="{{{detag (or page.title 'Untitled')}}}{{#if site.title}} | {{site.title}}{{/if}}" />
+
+<meta property="og:type" content="website" />
+
+{{#if (or antoraVersion site.antoraVersion)}}
+<meta name="generator" content="Antora {{or antoraVersion site.antoraVersion}}">
+{{/if}}
+
+{{#if (or page.canonicalUrl page.attributes.canonicalUrl)}}
+<link rel="canonical" href="{{or page.canonicalUrl page.attributes.canonicalUrl}}">
+<meta property="og:url" content="{{or page.canonicalUrl page.attributes.canonicalUrl}}" />
+{{/if}}
+
+{{#if page.keywords}}
+<meta name="keywords" content="{{page.keywords}}">
+{{/if}}
+
+{{#if (or page.description page.attributes.description)}}
+<meta name="description" content="{{or page.description page.attributes.description}}">
+<meta itemprop="description" content="{{or page.description page.attributes.description}}">
+<meta name="twitter:description" content="{{or page.description page.attributes.description}}">
+<meta property="og:description" content="{{or page.description page.attributes.description}}" />
+{{/if}}

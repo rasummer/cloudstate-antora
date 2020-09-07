@@ -1,1 +1,1 @@
-# cloudstate-antora
+# Cloudstate Antora
