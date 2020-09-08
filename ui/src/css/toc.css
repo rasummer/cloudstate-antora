@@ -43,8 +43,7 @@
 }
 
 .toc-menu h3 {
-  color: var(--color-lb-blue);
-  color: var(--color-lb-slate);
+  color: var(--color-lb-light-grey-dkr);
   font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;

@@ -1,27 +1,31 @@
-.footer {
+.main-footer {
   position: relative;
-  padding: 4rem 0 2rem 0;
-  background-color: var(--color-lb-dark-blue);
-  text-align: center;
-  color: var(--color-lb-off-white-dkr);
+  background-color: #fafafa;
+  box-shadow: 0 -1px 0 #e1e1e1;
 }
 
-.footer img {
-  max-width: 160px;
-}
-
-.footer p {
+.footer {
+  margin: 0 1rem;
+  padding: 2rem 1rem;
+  color: #5d5d5d;
   font-size: 0.75rem;
 }
 
+.footer img {
+  height: 32px;
+  vertical-align: middle;
+  margin-right: 2rem;
+}
+
 .footer a {
-  color: var(--color-lb-off-white-dkr);
+  color: #5d5d5d;
 }
 
 .footer a:visited {
-  color: var(--color-lb-off-white-dkr);
+  color: #5d5d5d;
 }
 
 .footer a:hover {
-  color: #fff;
+  color: #5d5d5d;
+  cursor: pointer;
 }
