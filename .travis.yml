@@ -5,9 +5,22 @@ before_script:
   - npm install -g gulp-cli
 
 script:
-  - cd ui && yarn install && gulp preview:build && gulp bundle
+  - cd ui && yarn install && gulp preview:build && gulp bundle && cd -
+
+deploy:
+  provider: script
+  script: ui/bin/deploy-latest.sh
+  skip_cleanup: true
+  on:
+    branch: master
+
+env:
+  global:
+    # Github deploy token; encrypted with: travis encrypt --pro -r cloudstateio/cloudstate-antora GITHUB_DEPLOY_TOKEN=<cloudstate-bot.github.token>
+    secure: "OAEGreeKQf/OPe8snXAE3UKf0Y/6kjKQMrj7rBoXnw1inZ4p70kfIMynMDq9KWcAmybsHIYMLaCpdMLWm9+eN5/i4mj1iarLs8/CBmzo9PeLgouC1Sd0C03kAOopRXYkk4Bvi52fWsfX63V9yZkEZ9SsRydl5TBI5mgzUgJIvN47fkoziN8FsYysThKQWHq94SjQJyImGz7JmTJqzr3YRYmBYYtVarcgr94t6XP4eWckpF/j+sI1xGLqkTOJcT5fEes1Q+yd5II0XZIBjQdgzP20rziRU9vrUK2g0zUbZm183WZeqXqTktdFJVCw/0Me4bpgLjm8ptN/B4xsVy0Iv/V903NDp4jkjhQxTElXKZEmBY1g+xWVRhCBtiiY/lM2jH5x4/b0/5DtSAiKae2+SQRfVnNIai1uZt4UDAvL2Ra7zew41hjagsuFXJTh7qlaL6GHltP7mj2oHshB1gxsGWUNhcNgR/QA5Gk+pt/D0O0Xxm8jgSkzwJxlQLiXO0jja+OqhBfRluJLFl3kYkO9a0ZaxQ8GyfQEfc2eLKoz+LxUyPQamTF8511ofHgdvbTpyNev9n2/ITIpcYf12Bpa2GAZaLfE/qvcaI2M+PDnDzQe3q9AXjxZy2Q/x59UDkN10d9s0YjqvlIJJ/Gh7xsUOxqYj61anOiuTLCYaM7yzfA="
 
 cache:
   yarn: true
   directories:
     - $HOME/.cache
+    - ui/node_modules

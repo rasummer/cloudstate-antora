@@ -6,11 +6,11 @@ UI theme for Antora-based Cloudstate documentation.
 
 To use the Cloudstate documentation UI for an Antora-generated site, add the following configuration to your playbook:
 
-[source,yaml,subs=attributes+]
+[source,yaml]
 ----
 ui:
   bundle:
-    url: TODO
+    url: https://github.com/cloudstateio/cloudstate-antora/raw/latest/download/ui-bundle.zip
     snapshot: true
 ----
 
