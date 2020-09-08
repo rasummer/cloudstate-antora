@@ -1,5 +1,4 @@
 :root {
-  --oss-banner-height: 70px;
   --navbar-height: 80px;
 }
 
@@ -8,7 +7,7 @@ html.is-clipped--navbar {
 }
 
 body {
-  padding-top: calc(var(--navbar-height) + var(--oss-banner-height));
+  padding-top: var(--navbar-height);
 }
 
 .header {
@@ -133,7 +132,7 @@ body {
 }
 
 .navbar-menu {
-  display: none;
+  /* display: none; */
 }
 
 .navbar-item,
@@ -188,6 +187,7 @@ body {
   margin: 0.25rem 0;
 }
 
+/*
 @media screen and (max-width: 1023px) {
   .navbar-brand .navbar-item {
     align-items: center;
@@ -202,7 +202,7 @@ body {
   .navbar-menu.is-active {
     display: block;
     box-shadow: 0 8px 16px rgba(10, 10, 10, 0.1);
-    max-height: calc(100vh - var(--navbar-height) - var(--oss-banner-height));
+    max-height: calc(100vh - var(--navbar-height));
     overflow-y: auto;
   }
 
@@ -212,8 +212,10 @@ body {
     color: var(--color-lb-blue);
   }
 }
+*/
 
-@media screen and (min-width: 1024px) {
+/* @media screen and (min-width: 1024px) { */
+@media screen {
   .navbar,
   .navbar-menu,
   .navbar-end {
@@ -246,7 +248,7 @@ body {
   .navbar-end {
     justify-content: flex-end;
     margin-left: auto;
-    margin-right: 0.5rem;
+    /* margin-right: 0.5rem; */
   }
 
   .navbar-dropdown {

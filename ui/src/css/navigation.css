@@ -10,7 +10,7 @@ body.simple .navigation-container {
 .navigation-container {
   display: none;
   position: fixed;
-  top: calc(var(--navbar-height) + var(--oss-banner-height));
+  top: var(--navbar-height);
   left: 0;
   width: 100%;
   font-size: 0.9375rem;
@@ -25,7 +25,7 @@ body.simple .navigation-container {
   background-color: #fafafa;
   position: relative;
   top: var(--toolbar-height);
-  height: calc(100vh - var(--navbar-height) - var(--oss-banner-height) - var(--toolbar-height));
+  height: calc(100vh - var(--navbar-height) - var(--toolbar-height));
 }
 
 .navigation .panels {
@@ -59,10 +59,10 @@ body.simple .navigation-container {
   }
 
   .navigation {
-    top: calc(var(--navbar-height) + var(--oss-banner-height));
+    top: var(--navbar-height);
     box-shadow: none;
     position: sticky;
-    height: calc(100vh - var(--navbar-height) - var(--oss-banner-height));
+    height: calc(100vh - var(--navbar-height));
   }
 }
 

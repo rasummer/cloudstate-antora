@@ -17,7 +17,7 @@ body.simple .toolbar {
   height: var(--toolbar-height);
   justify-content: flex-start;
   position: sticky;
-  top: calc(var(--navbar-height) + var(--oss-banner-height));
+  top: var(--navbar-height);
   z-index: 2;
 }
 

@@ -5,7 +5,6 @@
 @import "navigation.css";
 @import "navigation-menu.css";
 @import "navigation-explore.css";
-@import "oss-banners.css";
 @import "toolbar.css";
 @import "breadcrumbs.css";
 @import "page-versions.css";
@@ -13,6 +12,7 @@
 @import "toc.css";
 @import "doc.css";
 @import "header.css";
+@import "header-lightbend.css";
 @import "footer.css";
 @import "highlight.css";
 @import "oneTrust.css";
