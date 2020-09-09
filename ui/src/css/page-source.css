@@ -1,0 +1,21 @@
+.page-source {
+  margin: 1rem 0.5rem;
+  padding: 0 1rem;
+  font-size: 0.75rem;
+  color: var(--color-lb-light-grey-dkr);
+}
+
+@media screen and (min-width: 1024px) {
+  .page-source {
+    margin: 1rem;
+  }
+}
+
+.page-source a,
+.page-source a:visited {
+  color: var(--color-lb-blue);
+}
+
+.page-source a:hover {
+  color: var(--color-lb-blue-dkr);
+}
