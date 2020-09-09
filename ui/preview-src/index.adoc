@@ -7,6 +7,7 @@ Author Name
 :toc:
 :toc-title: ON THIS PAGE
 :toclevels: 2
+:page-pagination:
 :page-supergroup-scala-java: Language
 :page-supergroup-sbt-maven: Build Tool
 :page-supergroup-sbt-maven-gradle: Build Tool
@@ -14,7 +15,6 @@ Author Name
 :page-supergroup-kubernetes-openshift: Platform
 :page-supergroup-mac-ubuntu: OS
 :page-supergroup-browser-cli: Interface
-
 
 
 == Configure the service locator
