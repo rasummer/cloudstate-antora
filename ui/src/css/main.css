@@ -1,11 +1,13 @@
-@media screen and (min-width: 1024px) {
-  .main-wrapper {
-    display: flex;
-  }
+.main-wrapper {
+  display: flex;
+}
 
-  .main {
-    flex: auto;
-    /* min-width: 0 required for flexbox to constrain overflowing elements */
-    min-width: 0;
-  }
+.main {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 80px);
+  /* min-width: 0 required for flexbox to constrain overflowing elements */
+  min-width: 0;
+  width: 100%;
 }
