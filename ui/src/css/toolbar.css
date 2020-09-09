@@ -8,10 +8,10 @@ body.simple .toolbar {
 }
 
 .toolbar {
-  color: #5d5d5d;
+  color: var(--color-lb-grey);
   align-items: center;
-  background-color: #fafafa;
-  box-shadow: 0 1px 0 #e1e1e1;
+  background-color: var(--color-lb-off-white);
+  box-shadow: 0 1px 2px var(--color-lb-light-grey);
   display: flex;
   font-size: 0.75rem;
   height: var(--toolbar-height);

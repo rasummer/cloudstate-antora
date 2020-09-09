@@ -1,13 +1,13 @@
 .main-footer {
   flex-shrink: 0;
   width: 100%;
-  background-color: #fafafa;
-  box-shadow: 0 -1px 0 #e1e1e1;
+  /* background-color: var(--color-lb-off-white-dkr); */
+  box-shadow: 0 -1px 2px var(--color-lb-light-grey);
 }
 
 .footer {
   padding: 2rem 0;
-  color: #5d5d5d;
+  color: var(--color-lb-grey);
   font-size: 0.75rem;
   text-align: center;
 }
@@ -41,14 +41,14 @@
 }
 
 .footer a {
-  color: #5d5d5d;
+  color: var(--color-lb-grey);
 }
 
 .footer a:visited {
-  color: #5d5d5d;
+  color: var(--color-lb-grey);
 }
 
 .footer a:hover {
-  color: #5d5d5d;
+  color: var(--color-lb-grey);
   cursor: pointer;
 }

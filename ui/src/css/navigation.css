@@ -22,7 +22,7 @@ body.simple .navigation-container {
 }
 
 .navigation {
-  background-color: #fafafa;
+  background-color: var(--color-lb-off-white);
   position: relative;
   top: var(--toolbar-height);
   height: calc(100vh - var(--navbar-height) - var(--toolbar-height));
@@ -41,7 +41,7 @@ body.simple .navigation-container {
   }
 
   .navigation {
-    box-shadow: 0.5px 0 3px #c1c1c1;
+    box-shadow: 0.5px 0 3px var(--color-lb-light-grey);
   }
 }
 
