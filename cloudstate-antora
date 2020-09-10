@@ -1,0 +1,181 @@
+#!/usr/bin/env bash
+#
+# cloudstate-antora build script
+
+# antora docker image
+
+readonly antora_version="2.3.3"
+readonly antora_docker_image="cloudstateio/cloudstate-antora"
+
+# locations
+
+readonly docs_dir=$(pwd)
+readonly root_dir=$(git rev-parse --show-toplevel)
+readonly base_dir="/antora/${docs_dir#$root_dir/}"
+readonly build_dir="$docs_dir/build"
+readonly site_dir="$build_dir/site"
+
+# echo logs
+
+function red {
+  echo -en "\033[0;31m$@\033[0m"
+}
+
+function green {
+  echo -en "\033[0;32m$@\033[0m"
+}
+
+function yellow {
+  echo -en "\033[0;33m$@\033[0m"
+}
+
+function blue {
+  echo -en "\033[0;34m$@\033[0m"
+}
+
+function info {
+  echo "$@"
+}
+
+function error {
+  echo $(red "error:" "$@") 1>&2
+}
+
+function fail {
+  error "$@"
+  exit 1
+}
+
+# utility functions
+
+function function_exists {
+  declare -f "$1" > /dev/null
+}
+
+# cloudstate-antora commands
+
+function cloudstate_antora__help {
+  cat <<EOM
+cloudstate-antora build script
+
+Usage:
+  cloudstate-antora [command] [options]
+
+Commands:
+  build     Build a documentation site
+  clean     Remove the build directory
+  env       Print build locations as env vars
+  preview   Run HTTP server to preview site
+  validate  Validate xrefs across the site
+
+Use "cloudstate-antora help [command]" for more information about a command.
+EOM
+}
+
+function cloudstate_antora__help__build {
+  cat <<EOM
+Build a documentation site
+
+Usage:
+  cloudstate-antora build [playbook]
+EOM
+}
+
+function cloudstate_antora__build {
+  local playbook="$1"
+  [ -n "$playbook" ] || fail "missing required argument: playbook"
+  info "Building Antora documentation site..."
+  docker run \
+    -u $(id -u):$(id -g) \
+    -v "$root_dir:/antora" \
+    --rm \
+    --entrypoint /bin/sh \
+    -t $antora_docker_image:$antora_version \
+    -c "cd $base_dir && antora --cache-dir=.cache/antora --stacktrace $playbook" \
+    || fail "Documentation site failed to build"
+  info $(green "Documentation site created") "$site_dir"
+}
+
+function cloudstate_antora__help__clean {
+  cat <<EOM
+Remove the build directory
+
+Usage:
+  cloudstate-antora clean
+EOM
+}
+
+function cloudstate_antora__clean {
+  rm -rf $build_dir
+  info $(yellow "Build directory removed")
+}
+
+function cloudstate_antora__help__env {
+  cat <<EOM
+Print build locations as env vars: root_dir, build_dir, site_dir
+
+Usage:
+  cloudstate-antora env
+EOM
+}
+
+function cloudstate_antora__env {
+  echo "root_dir=$root_dir"
+  echo "build_dir=$build_dir"
+  echo "site_dir=$site_dir"
+}
+
+function cloudstate_antora__help__preview {
+  cat <<EOM
+Run HTTP server to preview site
+
+Usage:
+  cloudstate-antora preview
+EOM
+}
+
+function cloudstate_antora__preview {
+  [ -d "$site_dir" ] || fail "build documentation site before previewing"
+  info $(blue "Serving documentation site at http://localhost:8000")
+  python3 -m http.server --directory $site_dir
+}
+
+function cloudstate_antora__help__validate {
+  cat <<EOM
+Validate xrefs across the site
+
+Usage:
+  cloudstate-antora validate [playbook]
+EOM
+}
+
+function cloudstate_antora__validate {
+  local playbook="$1"
+  [ -n "$playbook" ] || fail "missing required argument: playbook"
+  docker run \
+    -v "$root_dir:/antora" \
+    --rm \
+    --entrypoint /bin/sh \
+    -t $antora_docker_image:$antora_version \
+    -c "cd ${base_dir} && NODE_PATH=\"\$(npm -g root)\" antora --generator @antora/xref-validator $playbook" \
+    || fail "Documentation site failed to validate"
+  info $(green "Documentation site xrefs validated")
+}
+
+# run cloudstate-antora command
+
+declare -r command=$1
+case $command in
+  "" )
+    cloudstate_antora__help
+    ;;
+  "help" )
+    shift
+    function_exists "cloudstate_antora__help__$1" && "cloudstate_antora__help__$1" || cloudstate_antora__help
+    ;;
+  * )
+    shift
+    function_exists "cloudstate_antora__${command}" || fail "command does not exist: ${command}"
+    "cloudstate_antora__${command}" "$@"
+    ;;
+esac
