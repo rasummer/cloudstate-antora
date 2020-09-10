@@ -75,11 +75,16 @@
   border-left: 2px solid var(--color-lb-blue);
 }
 
-.toc-menu ul li.h2 a {
+.toc-menu ul li[data-level="1"] a {
   font-size: 0.85rem;
 }
 
-.toc-menu ul li.h3 a {
+.toc-menu ul li[data-level="2"] a {
   font-size: 0.75rem;
-  padding-left: 1.5rem;
+  padding-left: 1.25rem;
+}
+
+.toc-menu ul li[data-level="3"] a {
+  font-size: 0.65rem;
+  padding-left: 2rem;
 }
