@@ -64,7 +64,6 @@ Usage:
 Commands:
   build     Build a documentation site
   clean     Remove the build directory
-  env       Print build locations as env vars
   preview   Run HTTP server to preview site
   validate  Validate xrefs across the site
 
@@ -108,21 +107,6 @@ EOM
 function cloudstate_antora__clean {
   rm -rf $build_dir
   info $(yellow "Build directory removed")
-}
-
-function cloudstate_antora__help__env {
-  cat <<EOM
-Print build locations as env vars: root_dir, build_dir, site_dir
-
-Usage:
-  cloudstate-antora env
-EOM
-}
-
-function cloudstate_antora__env {
-  echo "root_dir=$root_dir"
-  echo "build_dir=$build_dir"
-  echo "site_dir=$site_dir"
 }
 
 function cloudstate_antora__help__preview {
