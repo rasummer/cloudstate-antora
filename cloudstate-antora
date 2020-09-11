@@ -146,7 +146,7 @@ function cloudstate_antora__deploy {
 
   local module_dir="$repo_dir/$module"
   info "Syncing docs to $module_dir"
-  rsync -av "${dirs[@]}" "$module_dir"
+  rsync -av --delete "${dirs[@]}" "$module_dir"
   git -C "$repo_dir" add --all "$module_dir"
 
   # Note: concurrent deploys for different modules can conflict on push
