@@ -100,7 +100,7 @@ function cloudstate_antora__build {
       * ) playbook="$1" ; shift ;;
     esac
   done
-  [ -n "$playbook" ] || fail "missing required argument: playbook"
+  [ -z "$playbook" ] && fail "missing required argument: playbook"
   info "Building Antora documentation site..."
   docker run \
     -u $(id -u):$(id -g) \
@@ -196,16 +196,40 @@ EOM
 }
 
 function cloudstate_antora__validate {
-  local playbook="$1"
-  [ -n "$playbook" ] || fail "missing required argument: playbook"
-  docker run \
-    -v "$root_dir:/antora" \
-    --rm \
-    --entrypoint /bin/sh \
-    -t $antora_docker_image:$antora_version \
-    -c "cd ${base_dir} && NODE_PATH=\"\$(npm -g root)\" antora --generator @antora/xref-validator $playbook" \
-    || fail "Documentation site failed to validate"
-  info $(green "Documentation site xrefs validated")
+  local playbook
+  local xrefs=true
+  local links=false
+  local links_config=""
+  while [[ $# -gt 0 ]] ; do
+    case "$1" in
+      --links ) links=true ; shift ;;
+      --links-config ) links_config="--config $2" ; shift 2 ;;
+      --no-xrefs ) xrefs=false ; shift ;;
+      * ) playbook="$1" ; shift ;;
+    esac
+  done
+  $xrefs && [ -z "$playbook" ] && fail "missing required argument: playbook"
+  if $xrefs ; then
+    docker run \
+      -v "$root_dir:/antora" \
+      --rm \
+      --entrypoint /bin/sh \
+      -t $antora_docker_image:$antora_version \
+      -c "cd $base_dir && NODE_PATH=\"\$(npm -g root)\" antora --generator @antora/xref-validator $playbook" \
+      || fail "Documentation site failed to validate xrefs"
+    info $(green "Documentation site xrefs validated")
+  fi
+  # Note: variable substitution in links is not currently supported: https://github.com/gaurav-nelson/asciidoc-link-check/issues/16
+  if $links ; then
+    docker run \
+      -v "$root_dir:/antora" \
+      --rm \
+      --entrypoint /bin/sh \
+      -t $antora_docker_image:$antora_version \
+      -c "cd $base_dir && find . -name '*.adoc' -print0 | xargs -0 -n1 asciidoc-link-check --progress $links_config" \
+      || fail "Documentation site failed to validate links"
+    info $(green "Documentation site links validated")
+  fi
 }
 
 # run cloudstate-antora command
