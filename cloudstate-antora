@@ -91,7 +91,15 @@ EOM
 }
 
 function cloudstate_antora__build {
-  local playbook="$1"
+  local playbook
+  local -a attributes
+  while [[ $# -gt 0 ]] ; do
+    case "$1" in
+      --attribute | -a ) attributes+=("--attribute" "$2") ; shift 2 ;;
+      --author-mode ) attributes+=("--attribute" "todo" "--attribute" "review") ; shift ;;
+      * ) playbook="$1" ; shift ;;
+    esac
+  done
   [ -n "$playbook" ] || fail "missing required argument: playbook"
   info "Building Antora documentation site..."
   docker run \
@@ -100,7 +108,7 @@ function cloudstate_antora__build {
     --rm \
     --entrypoint /bin/sh \
     -t $antora_docker_image:$antora_version \
-    -c "cd $base_dir && antora --cache-dir=.cache/antora --stacktrace $playbook" \
+    -c "cd $base_dir && antora --cache-dir=.cache/antora --stacktrace ${attributes[@]} $playbook" \
     || fail "Documentation site failed to build"
   info $(green "Documentation site created") "$site_dir"
 }
