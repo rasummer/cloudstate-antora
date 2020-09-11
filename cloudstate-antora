@@ -7,6 +7,14 @@
 readonly antora_version="2.3.3"
 readonly antora_docker_image="cloudstateio/cloudstate-antora"
 
+# cloudstate.io deploy
+
+readonly deploy_repository="cloudstateio/docs"
+readonly deploy_branch="current"
+readonly deploy_token_var="DEPLOY_DOCS_TOKEN"
+readonly deploy_name="Cloudstate Bot"
+readonly deploy_email="deploy@cloudstate.io"
+
 # locations
 
 readonly docs_dir=$(pwd)
@@ -14,6 +22,7 @@ readonly root_dir=$(git rev-parse --show-toplevel)
 readonly base_dir="/antora/${docs_dir#$root_dir/}"
 readonly build_dir="$docs_dir/build"
 readonly site_dir="$build_dir/site"
+readonly deploy_dir="$build_dir/deploy"
 
 # echo logs
 
@@ -64,6 +73,7 @@ Usage:
 Commands:
   build     Build a documentation site
   clean     Remove the build directory
+  deploy    Deploy documentation to cloudstate.io
   preview   Run HTTP server to preview site
   validate  Validate xrefs across the site
 
@@ -107,6 +117,50 @@ EOM
 function cloudstate_antora__clean {
   rm -rf $build_dir
   info $(yellow "Build directory removed")
+}
+
+function cloudstate_antora__help__deploy {
+  cat <<EOM
+Deploy documentation to cloudstate.io
+
+Usage:
+  cloudstate-antora deploy [module] [dirs...]
+EOM
+}
+
+function cloudstate_antora__deploy {
+  local module="$1"; shift
+  local dirs=("$@")
+  [ -z "$module" ] && fail "missing required argument: module"
+  [ ${#dirs[@]} -eq 0 ] && fail "missing required argument: dirs"
+
+  local repo_url="git@github.com:${deploy_repository}.git"
+  [ -z "${!deploy_token_var}" ] || repo_url="https://${!deploy_token_var}@github.com/${deploy_repository}.git"
+  info $(blue "Deploying $module documentation to $deploy_repository")
+
+  local repo_dir="$deploy_dir/docs"
+  mkdir -p "$deploy_dir"
+  [ -d "$repo_dir" ] && rm -rf "$repo_dir"
+  info "Cloning repository to $repo_dir"
+  git clone --branch $deploy_branch --depth=1 $repo_url "$repo_dir"
+
+  local module_dir="$repo_dir/$module"
+  info "Syncing docs to $module_dir"
+  rsync -av "${dirs[@]}" "$module_dir"
+  git -C "$repo_dir" add --all "$module_dir"
+
+  # Note: concurrent deploys for different modules can conflict on push
+  if ! $(git -C "$repo_dir" diff --exit-code --quiet HEAD); then
+    info "Deploying $module changes to $deploy_repository:$deploy_branch"
+    git -C "$repo_dir" config user.name "$deploy_name"
+    git -C "$repo_dir" config user.email "$deploy_email"
+    git -C "$repo_dir" commit -m "Deploy $module documentation"
+    git -C "$repo_dir" push --quiet $repo_url $deploy_branch
+    git -C "$repo_dir" show --stat-count=10 HEAD
+    info $(green "Deployed $module documentation to $deploy_repository")
+  else
+    info $(yellow "No changes to deploy for $deploy_repository")
+  fi
 }
 
 function cloudstate_antora__help__preview {
