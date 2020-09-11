@@ -76,6 +76,7 @@ Commands:
   deploy    Deploy documentation to cloudstate.io
   preview   Run HTTP server to preview site
   validate  Validate xrefs across the site
+  version   Describe version based on nearest git tag
 
 Use "cloudstate-antora help [command]" for more information about a command.
 EOM
@@ -86,7 +87,11 @@ function cloudstate_antora__help__build {
 Build a documentation site
 
 Usage:
-  cloudstate-antora build [playbook]
+  cloudstate-antora build [options...] <playbook>
+
+Options:
+  -a | --attribute <attribute|attribute=value>  Set an asciidoc attribute for site generation
+       --author-mode                            Enable 'todo' and 'review' attributes
 EOM
 }
 
@@ -132,7 +137,7 @@ function cloudstate_antora__help__deploy {
 Deploy documentation to cloudstate.io
 
 Usage:
-  cloudstate-antora deploy [module] [dirs...]
+  cloudstate-antora deploy <module> <dirs...>
 EOM
 }
 
@@ -188,10 +193,15 @@ function cloudstate_antora__preview {
 
 function cloudstate_antora__help__validate {
   cat <<EOM
-Validate xrefs across the site
+Validate xrefs or links across the site
 
 Usage:
-  cloudstate-antora validate [playbook]
+  cloudstate-antora validate [options...] [playbook]
+
+Options:
+  --links                  Whether to validate external links (with asciidoc-link-check)
+  --links-config <config>  Path to asciidoc-link-check config (within documentation dir)
+  --no-xrefs               Disable the xref validation (for only external link validation)
 EOM
 }
 
@@ -230,6 +240,30 @@ function cloudstate_antora__validate {
       || fail "Documentation site failed to validate links"
     info $(green "Documentation site links validated")
   fi
+}
+
+function cloudstate_antora__help__version {
+  cat <<EOM
+Describe version based on nearest git tag
+
+Usage:
+  cloudstate-antora version [options]
+
+Options:
+  --prefix <prefix>  Set the tag prefix (default: 'v')
+EOM
+}
+
+function cloudstate_antora__version {
+  local prefix="v"
+  while [[ $# -gt 0 ]] ; do
+    case "$1" in
+      --prefix ) prefix="$2" ; shift 2 ;;
+      * ) shift ;;
+    esac
+  done
+  local tag=$(git describe --tags --abbrev=0 --match "$prefix[0-9]*" 2> /dev/null)
+  [ -n "$tag" ] && echo "${tag#$prefix}" || echo "0.0.0"
 }
 
 # run cloudstate-antora command
