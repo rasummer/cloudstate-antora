@@ -19,10 +19,11 @@ readonly deploy_email="deploy@cloudstate.io"
 
 readonly docs_dir=$(pwd)
 readonly root_dir=$(git rev-parse --show-toplevel)
-readonly base_dir="/antora/${docs_dir#$root_dir/}"
+readonly base_path="${docs_dir#$root_dir/}"
+readonly base_dir="/antora/$base_path"
 readonly build_dir="$docs_dir/build"
 readonly site_dir="$build_dir/site"
-readonly deploy_dir="$build_dir/deploy"
+readonly deploy_dir="$docs_dir/.deploy"
 
 # echo logs
 
@@ -137,43 +138,144 @@ function cloudstate_antora__help__deploy {
 Deploy documentation to cloudstate.io
 
 Usage:
-  cloudstate-antora deploy <module> <dirs...>
+  cloudstate-antora deploy [options] <dirs...>
+
+Options:
+  -m | --module <module>      Name of this Cloudstate module (required)
+  -u | --upstream <upstream>  Github upstream as <owner>/<repo> (required)
+  -b | --branch <branch>      Git branch to publish sources (required)
 EOM
 }
 
+function __deploy_repo_url {
+  local repo="$1"
+  local repo_url="git@github.com:${repo}.git"
+  [ -z "${!deploy_token_var}" ] || repo_url="https://${!deploy_token_var}@github.com/${repo}.git"
+  echo "$repo_url"
+}
+
+function __deploy_repo_dir {
+  local repo="$1"
+  echo "$deploy_dir/repo/$repo"
+}
+
+function __deploy_checkout {
+  local repo="$1"
+  local branch="$2"
+  local repo_url=$(__deploy_repo_url "$repo")
+  local dir=$(__deploy_repo_dir "$repo")
+  mkdir -p $(dirname "$dir")
+  if [ -d "$dir" ]; then
+    info "Updating local repository in $dir ..."
+    if git -C "$dir" remote | grep upstream > /dev/null ; then
+      git -C "$dir" remote set-url upstream $repo_url
+    else
+      git -C "$dir" remote add upstream $repo_url
+    fi
+    git -C "$dir" fetch upstream
+  else
+    info "Cloning $repo repository ..."
+    git clone --origin upstream $repo_url "$dir"
+  fi
+  local local_branch_exists=$(git -C "$dir" rev-parse --verify $branch &> /dev/null; echo $?)
+  local remote_branch_exists=$(git -C "$dir" ls-remote --exit-code --heads $repo_url $branch &> /dev/null; echo $?)
+  if [ $local_branch_exists -ne 0 ] && [ $remote_branch_exists -ne 0 ] ; then
+    info "Creating new $branch branch ..."
+    git -C "$dir" checkout --orphan "$branch"
+    git -C "$dir" reset --hard
+    git -C "$dir" commit --allow-empty -m "Create $branch branch"
+  else
+    info "Checking out $branch branch ..."
+    if [ $local_branch_exists -ne 0 ] ; then
+      git -C "$dir" checkout -f -t upstream/$branch
+    else
+      git -C "$dir" checkout -f $branch
+      [ $remote_branch_exists -eq 0 ] && git -C "$dir" reset --hard upstream/$branch
+    fi
+  fi
+}
+
+function __deploy_push {
+  local repo="$1"
+  local branch="$2"
+  local message="$3"
+  local dir=$(__deploy_repo_dir "$repo")
+  local url=$(__deploy_repo_url "$repo")
+  git -C "$dir" add --all
+  if ! $(git -C "$dir" diff --exit-code --quiet HEAD); then
+    git -C "$dir" config user.name "$deploy_name"
+    git -C "$dir" config user.email "$deploy_email"
+    git -C "$dir" commit -m "$message"
+    git -C "$dir" push --quiet "$url" $branch
+    git -C "$dir" show --stat-count=10 HEAD
+    info $(green "Pushed changes for $repo $branch")
+  else
+    info $(yellow "No changes to push for $repo $branch")
+  fi
+}
+
+function __deploy_mkstring {
+  local prefix="$1"; shift
+  local delimiter="$1"; shift
+  local suffix="$1"; shift
+  local first="$1"; shift
+  local rest=("$@")
+  echo "${prefix}${first}${rest[@]/#/$delimiter}$suffix"
+}
+
 function cloudstate_antora__deploy {
-  local module="$1"; shift
-  local dirs=("$@")
+  local module
+  local upstream
+  local branch
+  local -a dirs
+  while [[ $# -gt 0 ]] ; do
+    case "$1" in
+      --module | -m ) module="$2" ; shift 2 ;;
+      --upstream | -u ) upstream="$2" ; shift 2 ;;
+      --branch | -b ) branch="$2" ; shift 2 ;;
+      * ) dirs+=("$1") ; shift ;;
+    esac
+  done
+
   [ -z "$module" ] && fail "missing required argument: module"
+  [ -z "$upstream" ] && fail "missing required argument: upstream"
+  [ -z "$branch" ] && fail "missing required argument: branch"
   [ ${#dirs[@]} -eq 0 ] && fail "missing required argument: dirs"
 
-  local repo_url="git@github.com:${deploy_repository}.git"
-  [ -z "${!deploy_token_var}" ] || repo_url="https://${!deploy_token_var}@github.com/${deploy_repository}.git"
-  info $(blue "Deploying $module documentation to $deploy_repository")
+  local commit=$(git log -1 '--format=format:%H')
 
-  local repo_dir="$deploy_dir/docs"
-  mkdir -p "$deploy_dir"
-  [ -d "$repo_dir" ] && rm -rf "$repo_dir"
-  info "Cloning repository to $repo_dir"
-  git clone --branch $deploy_branch --depth=1 $repo_url "$repo_dir"
+  info $(blue "Deploying $module documentation to $upstream and $deploy_repository")
 
-  local module_dir="$repo_dir/$module"
-  info "Syncing docs to $module_dir"
-  rsync -av --delete "${dirs[@]}" "$module_dir"
-  git -C "$repo_dir" add --all "$module_dir"
+  __deploy_checkout "$upstream" "$branch"
+  local upstream_repo_dir=$(__deploy_repo_dir "$upstream")
+
+  info "Syncing docs to $upstream_repo_dir ..."
+  local sources_dir="$deploy_dir/sources/$upstream"
+  rm -rf "$sources_dir"
+  for dir in "${dirs[@]}" ; do
+    mkdir -p "$sources_dir/$base_path/$dir"
+    rsync -a "$dir/" "$sources_dir/$base_path/$dir/"
+  done
+  rsync -av --delete --exclude='.git/' "$sources_dir/" "$upstream_repo_dir/"
+
+  __deploy_push "$upstream" "$branch" "Update docs @ $commit"
+
+  __deploy_checkout "$deploy_repository" "$deploy_branch"
+  local docs_repo_dir=$(__deploy_repo_dir "$deploy_repository")
+
+  local docs_sources_dir="$docs_repo_dir/sources"
+  local docs_sources="$docs_sources_dir/$module.yml"
+  local start_paths=("${dirs[@]/#/$base_path/}")
+  mkdir -p "$docs_sources_dir"
+  cat > $docs_sources <<EOF
+url: https://github.com/$upstream
+branches: [$branch]
+start_paths: $(__deploy_mkstring '[' ', ' ']' "${start_paths[@]}")
+edit_url: https://github.com/$upstream/edit/master/{path}
+EOF
 
   # Note: concurrent deploys for different modules can conflict on push
-  if ! $(git -C "$repo_dir" diff --exit-code --quiet HEAD); then
-    info "Deploying $module changes to $deploy_repository:$deploy_branch"
-    git -C "$repo_dir" config user.name "$deploy_name"
-    git -C "$repo_dir" config user.email "$deploy_email"
-    git -C "$repo_dir" commit -m "Deploy $module documentation"
-    git -C "$repo_dir" push --quiet $repo_url $deploy_branch
-    git -C "$repo_dir" show --stat-count=10 HEAD
-    info $(green "Deployed $module documentation to $deploy_repository")
-  else
-    info $(yellow "No changes to deploy for $deploy_repository")
-  fi
+  __deploy_push "$deploy_repository" "$deploy_branch"  "Deploy $module documentation: $upstream@$commit"
 }
 
 function cloudstate_antora__help__preview {
