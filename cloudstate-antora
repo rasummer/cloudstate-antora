@@ -323,6 +323,11 @@ ui:
   bundle:
     url: https://github.com/cloudstateio/cloudstate-antora/raw/latest/download/ui-bundle.zip
     snapshot: true
+  supplemental_files:
+  - path: ui.yml
+    contents: |
+      static_files: [ .nojekyll ]
+  - path: .nojekyll
 runtime:
   fetch: true
 output:
