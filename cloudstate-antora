@@ -115,13 +115,13 @@ function cloudstate_antora__build {
   done
   if $site_from ; then
     [ ${#files[@]} -eq 0 ] && fail "missing required argument: source-descriptor"
-    cloudstate_antora__site "${files[@]}"
+    mkdir -p "$build_dir"
+    cloudstate_antora__site "${files[@]}" > "$build_dir/site.yml"
     playbook="build/site.yml"
   else
     playbook="${files[0]}"
     [ -z "$playbook" ] && fail "missing required argument: playbook"
   fi
-  info "Building Antora documentation site..."
   docker run \
     -u $(id -u):$(id -g) \
     -v "$root_dir:/antora" \
@@ -310,9 +310,7 @@ function cloudstate_antora__site {
   local sources=("$@")
   [ ${#sources[@]} -eq 0 ] && fail "missing required argument: source-descriptor"
 
-  local site_yml="${build_dir}/site.yml"
-  mkdir -p "${build_dir}"
-  cat > $site_yml <<EOF
+  cat <<EOF
 site:
   title: "Cloudstate Documentation"
   url: https://cloudstate.io/docs/
@@ -338,14 +336,13 @@ EOF
     first=true
     while read line ; do
       if $first ; then
-        echo "  - $line" >> $site_yml
+        echo "  - $line"
         first=false
       else
-        echo "    $line" >> $site_yml
+        echo "    $line"
       fi
     done < $source
   done
-  info $(green "Created site configuration") $site_yml
 }
 
 function cloudstate_antora__help__source {
@@ -450,7 +447,8 @@ function cloudstate_antora__validate {
   if $xrefs ; then
     if $site_from ; then
       [ ${#files[@]} -eq 0 ] && fail "missing required argument: source-descriptor"
-      cloudstate_antora__site "${files[@]}"
+      mkdir -p "$build_dir"
+      cloudstate_antora__site "${files[@]}" > "$build_dir/site.yml"
       playbook="build/site.yml"
     else
       playbook="${files[0]}"
