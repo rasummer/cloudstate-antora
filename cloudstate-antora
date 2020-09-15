@@ -197,6 +197,8 @@ function __deploy_checkout {
     info "Creating new $branch branch ..."
     git -C "$dir" checkout --orphan "$branch"
     git -C "$dir" reset --hard
+    git -C "$dir" config user.name "$deploy_name"
+    git -C "$dir" config user.email "$deploy_email"
     git -C "$dir" commit --allow-empty -m "Create $branch branch"
   else
     info "Checking out $branch branch ..."
