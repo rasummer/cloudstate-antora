@@ -276,8 +276,9 @@ function cloudstate_antora__deploy {
   mkdir -p "$docs_sources_dir"
 
   cloudstate_antora__source -u "$upstream" -b "$branch" \
-    --comment "Docs for: https://github.com/$upstream/commit/$commit" \
-    --comment "Based on: https://github.com/$upstream/commit/$docs_commit" \
+    --comment "$module @ current"
+    --comment "docs for: https://github.com/$upstream/commit/$commit" \
+    --comment "based on: https://github.com/$upstream/commit/$docs_commit" \
     "${dirs[@]}" > "$docs_sources"
 
   # Note: concurrent deploys for different modules can conflict on push
