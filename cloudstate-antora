@@ -18,8 +18,9 @@ readonly deploy_email="deploy@cloudstate.io"
 # locations
 
 readonly docs_dir=$(pwd)
-readonly root_dir=$(git rev-parse --show-toplevel)
-readonly base_path=$([ "$docs_dir" == "$root_dir" ] && echo "" || echo "${docs_dir#$root_dir/}/")
+readonly root_dir=$(git rev-parse --show-toplevel 2> /dev/null || echo "./")
+readonly root_path=$(git rev-parse --show-cdup 2> /dev/null || echo "./")
+readonly base_path=$(git rev-parse --show-prefix 2> /dev/null || echo "")
 readonly base_dir="/antora/$base_path"
 readonly build_dir="$docs_dir/build"
 readonly site_dir="$build_dir/site"
@@ -431,7 +432,7 @@ function cloudstate_antora__source {
 
   local url="https://github.com/$upstream"
   local branches="[$branch]"
-  $preview && url="/antora" && branches="[HEAD]"
+  $preview && url="$root_path" && branches="[HEAD]"
   local start_dirs=("${dirs[@]/#/$base_path}")
   local start_paths=$(__source_mkstring '[' ', ' ']' "${start_dirs[@]}")
   local edit_url="https://github.com/$upstream/edit/master/{path}"
