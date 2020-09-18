@@ -146,6 +146,7 @@ EOM
 function cloudstate_antora__clean {
   rm -rf $build_dir
   info $(yellow "Build directory removed")
+  __deploy_checkout "$deploy_repository" "$deploy_branch"
 }
 
 function cloudstate_antora__help__deploy {
