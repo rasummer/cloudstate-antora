@@ -146,7 +146,6 @@ EOM
 function cloudstate_antora__clean {
   rm -rf $build_dir
   info $(yellow "Build directory removed")
-  __deploy_checkout "$deploy_repository" "$deploy_branch"
 }
 
 function cloudstate_antora__help__deploy {
@@ -178,7 +177,7 @@ function __deploy_repo_dir {
 function __deploy_checkout {
   local repo="$1"
   local branch="$2"
-  local repo_url=$(__deploy_repo_url "$repo")
+  local repo_url="https://github.com/${repo}.git"
   local dir=$(__deploy_repo_dir "$repo")
   mkdir -p $(dirname "$dir")
   if [ -d "$dir" ]; then
