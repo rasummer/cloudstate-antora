@@ -351,6 +351,7 @@ asciidoc:
     idprefix: ''
     idseparator: '-'
     page-pagination: '@'
+    source-indent: 0@
 ui:
   bundle:
     url: https://github.com/cloudstateio/cloudstate-antora/raw/latest/download/ui-bundle.zip
