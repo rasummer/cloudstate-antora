@@ -76,7 +76,6 @@ Commands:
   build     Build a documentation site
   clean     Remove the build directory
   deploy    Deploy documentation to cloudstate.io
-  preview   Run HTTP server to preview site
   site      Create site configuration from source descriptors
   source    Create source descriptor for a component
   validate  Validate xrefs across the site
@@ -284,21 +283,6 @@ function cloudstate_antora__deploy {
 
   # Note: concurrent deploys for different modules can conflict on push
   __deploy_push "$deploy_repository" "$deploy_branch"  "Deploy $module documentation: $upstream@$commit"
-}
-
-function cloudstate_antora__help__preview {
-  cat <<EOM
-Run HTTP server to preview site
-
-Usage:
-  cloudstate-antora preview
-EOM
-}
-
-function cloudstate_antora__preview {
-  [ -d "$site_dir" ] || fail "build documentation site before previewing"
-  info $(blue "Serving documentation site at http://localhost:8000")
-  python3 -m http.server --directory $site_dir
 }
 
 function cloudstate_antora__help__site {
