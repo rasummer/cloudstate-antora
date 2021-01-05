@@ -9,12 +9,12 @@
 			var queryString = anchor[0].search;
 			let params = new URLSearchParams(queryString);
 			ytID = params.get("v");
-			$(this).before('<div class="flex-video-wrapper"><div class="flex-video"><div id="yt-'+ytID+'" class="cookie-warning youtube-warning"><a class="optanon-allow-all">Accept cookies to view video</a><span>Alternatively you can watch the video <a href="'+ytURL+'" target="_blank">here on YouTube</a></span></div></div></div>');
+			$(this).before('<div class="flex-video-wrapper"><div class="flex-video"><div id="yt-'+ytID+'" class="cookie-warning youtube-warning"><a class="optanon-allow-all" onclick="OneTrust.AllowAll();">Accept cookies to view video</a><span>Alternatively you can watch the video <a href="'+ytURL+'" target="_blank">here on YouTube</a></span></div></div></div>');
 			$(this).removeAttr("href").removeClass("yt-widget").addClass("yt-widget-hide");
 		});
 
 		$( ".youtube-warning" ).each(function( index ) {
-			Optanon.InsertHtml('<iframe id="player" class="youtube-embed-player" src="//www.youtube.com/embed/'+ytID+'?rel=0&modestbranding=0" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>', 'yt-'+ytID, null, {deleteSelectorContent: true}, 4);
+			OneTrust.InsertHtml('<iframe id="player" class="youtube-embed-player" src="//www.youtube.com/embed/'+ytID+'?rel=0&modestbranding=0" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>', 'yt-'+ytID, null, {deleteSelectorContent: true}, '4');
 		});
 	}
 </script>
